@@ -28,8 +28,7 @@ public class UserServiceImpl implements IUserService{
 
 	@Override
 	public List<User> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return (List<User>) userRepository.findAll();
 	}
 
 	@Override

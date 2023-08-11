@@ -3,10 +3,12 @@ package com.nissum.apiuser.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.nissum.apiuser.dto.Converter;
 import com.nissum.apiuser.dto.UserDTORequest;
@@ -15,6 +17,9 @@ import com.nissum.apiuser.exceptions.BadRequestException;
 import com.nissum.apiuser.exceptions.InternalServerErrorException;
 import com.nissum.apiuser.models.User;
 import com.nissum.apiuser.services.IUserService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +52,22 @@ public class UserRestController {
 		UserDTOResponse userResponse = converter.UserToDTO(newUser);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
+	}
+	
+	@GetMapping(value="/allusers",  produces= "application/json")
+	public ResponseEntity<?> getAll() {
+		List<User> users = userService.findAll();
+		
+		if (users.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+		}
+		else {
+			List<UserDTOResponse> userDTO = users
+					.stream().map(us -> converter.UserToDTO(us))
+					.collect(Collectors.toList());
+			
+			return ResponseEntity.status(HttpStatus.OK).body(userDTO);
+		}
 	}
 
 }
