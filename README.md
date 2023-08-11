@@ -4,6 +4,7 @@ la api api-user fue realizada para la creación de nuevos usuarios.
 # Instalación/Uso
 Este repositorio muestra operaciones como llamadas a la API REST, incluidos métodos HTTP válidos, encabezados y contenido del cuerpo, cuando corresponda.
 Las solicitudes se envían mediante métodos de llamada REST estándar, con un formato json predefinido para la creación de nuevos usuarios.
+El proyecto implementa Swagger para documentación y pruebas, h2 para almacenamiento y Jwt para la generación de tokens.
 
 # Proceso
 Al pasar el json con el formato predefinido este va a pasar por un proceso de validación del password y de el email, si estos están correctos se procederá a crear un token que se asignará a ese usuario y se guardará en la base de datos, luego retorna al cliente los datos requeridos del nuevo usuario.
