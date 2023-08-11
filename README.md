@@ -11,6 +11,8 @@ Al pasar el json con el formato predefinido este va a pasar por un proceso de va
 # API EndPoint
 
 - CREATE USER POST http://localhost:8080/api/usersnissumapi/user
+- GET ALL USERS GET http://localhost:8080/usersnissumapi/user/allusers
+- GET A SPECIFIC USER GET {http://localhost:8080/api/usersnissumapi/user/{id}
 
 # JSON FORMAT 
 El formato Json que requiere la api para crear un nuevo usuario es el siguiente: 
