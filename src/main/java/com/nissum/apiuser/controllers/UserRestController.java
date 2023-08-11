@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +16,12 @@ import com.nissum.apiuser.dto.UserDTORequest;
 import com.nissum.apiuser.dto.UserDTOResponse;
 import com.nissum.apiuser.exceptions.BadRequestException;
 import com.nissum.apiuser.exceptions.InternalServerErrorException;
+import com.nissum.apiuser.exceptions.ResourceNotFoundException;
 import com.nissum.apiuser.models.User;
 import com.nissum.apiuser.services.IUserService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -41,10 +44,7 @@ public class UserRestController {
             throw new BadRequestException("El email es requerido");
         }
 		
-		System.out.println(userService.findByEmail(userDTO.getEmail()).isPresent());
-		
 		if(userService.findByEmail(userDTO.getEmail()).isPresent()) {
-			System.out.println("Entro al email find");
 			throw new InternalServerErrorException("El email ya se encuentra registrado");
 		}
 		
@@ -68,6 +68,17 @@ public class UserRestController {
 			
 			return ResponseEntity.status(HttpStatus.OK).body(userDTO);
 		}
+	}
+	
+	@GetMapping(value="/user/{id}", produces = "application/json")
+	public ResponseEntity<?> getUser(@PathVariable Long id) {
+		Optional<User> optional = userService.findById(id);
+		
+		if (!optional.isPresent()) {
+			throw new ResourceNotFoundException("El usuario no existe en la base de datos.");
+		}
+		
+		return ResponseEntity.ok(optional.get());
 	}
 
 }

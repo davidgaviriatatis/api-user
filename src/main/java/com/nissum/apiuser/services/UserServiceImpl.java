@@ -15,6 +15,7 @@ import com.nissum.apiuser.dto.UserDTORequest;
 import com.nissum.apiuser.models.User;
 import com.nissum.apiuser.repositories.IUserRepository;
 import com.nissum.apiuser.utils.JwtUtil;
+import com.nissum.apiuser.exceptions.ResourceNotFoundException;
 
 @Service
 @Transactional
@@ -33,8 +34,11 @@ public class UserServiceImpl implements IUserService{
 
 	@Override
 	public Optional<User> findById(Long id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		if(!userRepository.existsById(id)) {
+			throw new ResourceNotFoundException("El usuario no se encuentra en la base de datos.");
+		}
+		
+		return userRepository.findById(id);
 	}
 
 	@Override
